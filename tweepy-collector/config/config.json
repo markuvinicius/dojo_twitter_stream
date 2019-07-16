@@ -1,0 +1,28 @@
+{
+    "LOCAL": {
+        "MONGODB":{            
+            "MONGODB_URI":"dev-mongo-db",
+            "MONGODB_COLLECTION":"tweets",
+            "MONGODB_PORT":27017,
+            "MONGODB_DATABASE":"twitter_rx",            
+            "MONGODB_USER":"",
+            "MONGODB_PASSWORD":""
+        },
+
+        "TWITTER":{
+            "CONSUMER_TOKEN":"<YOUR CONSUMER TOKEN>",
+            "CONSUMER_SECRET":"<YOUR CONSUMER SECRET>",
+            "KEY":"<YOUR API KEY>",
+            "SECRET":"<YOUR API SECRET>"
+        },
+
+        "LOG":{
+            "LOG_FORMAT":"%(asctime)s %(levelname)-10s %(threadName)s %(message)s ",
+            "LOG_LEVEL":"INFO"
+        },
+
+        "SEARCH":{
+            "STRING":["itau","itaú","itau-unibanco","unibanco","banco itau"]
+        }
+    }
+}
