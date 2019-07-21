@@ -10,7 +10,10 @@
 	</parent>
 	<groupId>br.com.markuvinicius.twitter.rx.consummer.api</groupId>
 	<artifactId>TwitterRxApi</artifactId>
+	
 	<version>0.0.1-SNAPSHOT</version>
+	
+	
 	<name>TwitterRxApi</name>
 	<description>Demo project for twitter consummer using spring webflux and mongodb</description>
 
@@ -105,6 +108,16 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		
+		<resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <filtering>true</filtering>
+	        </resource>
+    	</resources>
+		
 	</build>
+	
+	
 
 </project>

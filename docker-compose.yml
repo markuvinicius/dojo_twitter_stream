@@ -31,8 +31,8 @@ services:
     depends_on:
       - dev-mongo-db
 
-  spring-rx-api:
-    image: spring-rx-api:latest
+  twitter-rx-api:
+    image: datadealers/twitter-rx-comprehend:latest
     ports:
       - 5000:5000      
     depends_on:

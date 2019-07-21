@@ -30,22 +30,31 @@ public class Tweet {
 	
 	@Field(value="usuario")
 	private Object usuario;
+	
 	@Field(value="data")
 	private String dataPostagem;
+	
 	@Field(value="hashtags")	
 	private List<?> hashtags;
+	
 	@Field(value="user_mentions")
 	private List<?> userMentions;
+	
 	@Field(value="retweeted")
 	private boolean isRetweeted;
+	
 	@Field(value="quoted")
 	private boolean isQuoted;
+	
 	@Field(value="quote_count")
 	private Long quoteCount;
+	
 	@Field(value="reply_count")
 	private Long replyCount;
+	
 	@Field(value="retweet_count")
 	private Long retweetCount;
+	
 	@Field(value="favorite_count")
 	private Long favoriteCount;
 }
