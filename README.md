@@ -23,7 +23,27 @@ Apache Maven 3.6.1 (https://maven.apache.org/download.cgi)
 
 A step by step series of examples that tell you how to get a development env running
 
-#### Running the Database and Twitter Collector Containers
+#### Building the Twitter Collector Docker Image
+
+Once you have cloned the repository, proceed like that:
+
+```
+cd tweepy-collector;
+
+docker build \                                                                                                                 
+    --build-arg CONSUMER_TOKEN=<YOUR_TWITTER_CONSUMER_TOKEN> \
+    --build-arg CONSUMER_SECRET=<YOUR_TWITTER_CONSUMER_SECRET> \
+    --build-arg API_KEY=<YOUR_TWITTER_API_KEY> \
+    --build-arg API_SECRET=<YOUR_TWITTER_API_SECRET> \
+    -t tweepy-collector .
+```
+The arguments in the above command are:
+* <YOUR_TWITTER_CONSUMER_TOKEN>: You should put your Twitter Consumer Key Here
+* <YOUR_TWITTER_CONSUMER_SECRET>: You should put your Twitter Consumer Secret Here
+* <YOUR_TWITTER_API_KEY>: You should put your Twitter API Key Here
+* <YOUR_TWITTER_API_SECRET>: Your should put your Twitter API Secret Here
+
+#### Running the Composer
 
 The database and collector app are conteinerized at the docker-compose.yml file. To run those apps, you should execute:
 
@@ -31,12 +51,12 @@ The database and collector app are conteinerized at the docker-compose.yml file.
 docker-compose up -d
 ```
 
-After that, you will should have two containers running: A MongoDB document database and a Python collection worker. To check it out, run the command:
+After that, you should have two containers running: A MongoDB document database and a Python Twitter Streamer. To check it out, run the command above:
 
 ```
 docker-compose ps
 ```
-#### Running the Reactive API
+#### Running the Reactive API (Under Revision)
 
 In order to run the Java Reactive API:
 
