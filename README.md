@@ -43,6 +43,8 @@ The arguments in the above command are:
 * <YOUR_TWITTER_API_KEY>: You should put your Twitter API Key Here
 * <YOUR_TWITTER_API_SECRET>: Your should put your Twitter API Secret Here
 
+To see how to get your Twitter Credentials, check https://developer.twitter.com/
+
 #### Running the Composer
 
 The database and collector app are conteinerized at the docker-compose.yml file. To run those apps, you should execute:
