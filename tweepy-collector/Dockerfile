@@ -1,7 +1,18 @@
 FROM python:3.6
 LABEL maintainer 'Marku Vinicius <markuvinicius@gmail.com>'
 
-ENV PYTHONUNBUFFERED 1
-RUN pip install tweepy && pip install pymongo
+COPY ./ /app
 
-ENTRYPOINT ["/usr/local/bin/python"]
+WORKDIR /app
+
+ARG CONSUMER_TOKEN
+ARG CONSUMER_SECRET
+ARG API_KEY
+ARG API_SECRET
+
+ENV TWITTER_CONSUMER_TOKEN $CONSUMER_TOKEN
+ENV TWITTER_CONSUMER_SECRET $CONSUMER_SECRET
+ENV TWITTER_API_KEY $API_KEY
+ENV TWITTER_API_SECRET $API_SECRET
+
+ENTRYPOINT ["bash","./run_posts_data.sh"]

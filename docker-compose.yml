@@ -14,13 +14,8 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: root
 
-  twitter-collector:
-    image: python:3.6
-    volumes:
-      # Aplicacao
-      - ./tweepy-collector:/app
-    working_dir: /app
-    command: bash ./run_posts_data.sh
+  twitter-collector:    
+    image: tweepy-collector:latest    
     depends_on:
       - dev-mongo-db
 

@@ -4,6 +4,7 @@ import logging
 import argparse
 from MongoTwitterSync import MongoTwitterSync        
 from TwitterStreamListenner import TwitterStreamListenner
+import os
 
 
 def config_parser():
@@ -17,6 +18,23 @@ def config_parser():
     return parser.parse_args()
 
 # helpper que configura a autenticação da api do Twitter
+def config_twitter_api_env():
+    api = None
+    try:
+        auth1 = tweepy.auth.OAuthHandler(os.environ['TWITTER_CONSUMER_TOKEN'], 
+                                         os.environ['TWITTER_CONSUMER_SECRET'])
+        auth1.set_access_token( os.environ['TWITTER_API_KEY'] ,
+                                os.environ['TWITTER_API_SECRET'] )
+        api = tweepy.API(auth1)
+        logger.info("Twitter API Conectada com Sucesso")
+    except Exception as e:
+        if hasattr(e, 'message'):
+            logger.error("Erro ao configurar Twitter API: " + str(e.message) )
+        else:
+            logger.error("Erro ao configurar Twitter API: " + str(e))
+    finally:    
+        return api
+
 def config_twitter_api(config):   
     api = None
     try:
@@ -102,7 +120,8 @@ if __name__ == "__main__":
     # configura o logger
     logger = config_log(config)
     # configura a api do Twitter    
-    auth   = config_twitter_api(config)
+    #auth   = config_twitter_api(config)
+    auth   = config_twitter_api_env()
     mongo_sync = config_mongo_sync(config)    
 
     listener = TwitterStreamListenner(sync=mongo_sync, logger=logger)
