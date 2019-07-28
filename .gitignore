@@ -5,3 +5,4 @@ node_modules/*
 package-lock.*
 .vscode/*
 *.aws*
+TwitterRxApi/src/main/.DS_Store*

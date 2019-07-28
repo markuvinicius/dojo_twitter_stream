@@ -6,7 +6,7 @@ services:
     image: mongo:3.4    
     volumes: 
       - ./data/db:/data/db
-    # expoe a porta 27017
+    # expoe a porta 27017n
     ports:
       - 27017:27017 
     # configura login e senha de root
