@@ -9,11 +9,24 @@
             "MONGODB_PASSWORD":""
         },
 
-        "TWITTER":{
-            "CONSUMER_TOKEN":"<YOUR CONSUMER TOKEN>",
-            "CONSUMER_SECRET":"<YOUR CONSUMER SECRET>",
-            "KEY":"<YOUR API KEY>",
-            "SECRET":"<YOUR API SECRET>"
+        "LOG":{
+            "LOG_FORMAT":"%(asctime)s %(levelname)-10s %(threadName)s %(message)s ",
+            "LOG_LEVEL":"INFO"
+        },
+
+        "SEARCH":{
+            "STRING":["itau","itaú","itau-unibanco","unibanco","banco itau"]
+        }
+    },
+
+    "PROD": {
+        "MONGODB":{            
+            "MONGODB_URI":"avengers-cluster-qeimh.mongodb.net/test?retryWrites=true&w=majority",
+            "MONGODB_COLLECTION":"tweets",
+            "MONGODB_PORT":0,
+            "MONGODB_DATABASE":"twitter_rx",            
+            "MONGODB_USER":"twitter_collector",
+            "MONGODB_PASSWORD":"jqHMGV76rAMx8n5P"
         },
 
         "LOG":{
@@ -25,4 +38,5 @@
             "STRING":["itau","itaú","itau-unibanco","unibanco","banco itau"]
         }
     }
+
 }
