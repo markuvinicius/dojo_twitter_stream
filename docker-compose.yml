@@ -15,7 +15,7 @@ services:
     #  MONGO_INITDB_ROOT_PASSWORD: root
 
   twitter-collector:    
-    image: tweepy-collector:latest    
+    image: tweepy-collector:0.1.0    
     depends_on:
       - dev-mongo-db
 
@@ -31,10 +31,10 @@ services:
     depends_on:
       - dev-mongo-db
 
-  twitter-rx-api:
-    image: datadealers/twitter-rx-comprehend:latest
-    ports:
-      - 5000:5000      
-    depends_on:
-      - dev-mongo-db
+  #twitter-rx-api:
+  #  image: datadealers/twitter-rx-comprehend:latest
+  #  ports:
+  #    - 5000:5000      
+  #  depends_on:
+  #    - dev-mongo-db
     

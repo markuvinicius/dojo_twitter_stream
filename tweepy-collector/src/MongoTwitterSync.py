@@ -13,7 +13,7 @@ class MongoTwitterSync(TwitterSync):
 		if  ( user is None ) | (password is None) | ( (user == "") & (password == "") ) :          
 			uri = "mongodb://%s:%s" % (host, port)
 		else:    
-			uri = "mongodb://%s:%s@%s:%s/%s" % (quote_plus(user), quote_plus(password), host, port,database)
+			uri = "mongodb+srv://%s:%s@%s" % (quote_plus(user), quote_plus(password), host)
 
 		print(uri)
 
