@@ -14,8 +14,13 @@ services:
     #  MONGO_INITDB_ROOT_USERNAME: root
     #  MONGO_INITDB_ROOT_PASSWORD: root
 
-  twitter-collector:    
-    image: tweepy-collector:0.1.0    
+  #twitter-collector:    
+  #  image: tweepy-collector:0.1.0    
+  #  depends_on:
+  #    - dev-mongo-db
+
+  twitter-collector-kinesis:    
+    image: tweepy-collector-stream:0.1.0    
     depends_on:
       - dev-mongo-db
 

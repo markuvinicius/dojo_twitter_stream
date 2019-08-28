@@ -2,7 +2,8 @@ import tweepy
 import json
 import logging
 import argparse
-from MongoTwitterSync import MongoTwitterSync        
+#from MongoTwitterSync import MongoTwitterSync   
+from KinesisTwitterSync import KinesisTwitterSync     
 from TwitterStreamListenner import TwitterStreamListenner
 import os
 
@@ -55,6 +56,17 @@ def config_mongo_sync(config):
         logger.error("Erro ao conectar ao Mongo: " + str(e) )
     finally:
         return mongo_sync
+
+
+def config_kinesis_sync(config):
+    kinesis_sync = None
+    try:
+        kinesis_sync = KinesisTwitterSync(stream_name='twitter_data_landing_stream', region='us-east-2', logger=logger)
+        logger.info("Kinesis Configurado com sucesso")                            
+    except Exception as e:
+        logger.error("Erro ao conectar ao Kinesis: " + str(e) )
+    finally:
+        return kinesis_sync
 
 # helper que configura o logger da aplicação
 def config_log(config):    
@@ -110,9 +122,11 @@ if __name__ == "__main__":
     logger = config_log(config)
     # configura a api do Twitter 
     auth   = config_twitter_api()
-    mongo_sync = config_mongo_sync(config)    
+    #mongo_sync = config_mongo_sync(config) 
+    kinesis_sync = config_kinesis_sync(config)   
 
-    listener = TwitterStreamListenner(sync=mongo_sync, logger=logger)
+    #listener = TwitterStreamListenner(sync=mongo_sync, logger=logger)
+    listener = TwitterStreamListenner(sync=kinesis_sync, logger=logger)
     searchStream = tweepy.Stream(auth=auth.auth, listener=listener)    
 
     query_string = config['SEARCH']['STRING']

@@ -22,7 +22,7 @@ class TwitterStreamListenner(tweepy.StreamListener):
         parsed_data = {}
 
         parsed_data['id']       = json_data['id']
-        parsed_data['data']     = self.to_datetime(json_data['created_at'])
+        #parsed_data['data']     = self.to_datetime(json_data['created_at'])
         parsed_data['usuario']  = json_data['user']
 
         if 'extended_tweet' in json_data:

@@ -1,3 +1,4 @@
 tweepy
-pymongo
-dnspython
+#pymongo
+#dnspython
+boto3
