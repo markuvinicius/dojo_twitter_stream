@@ -2,33 +2,31 @@ import tweepy
 import json
 import logging
 import argparse
-#from MongoTwitterSync import MongoTwitterSync   
-from KinesisTwitterSync import KinesisTwitterSync     
-from TwitterStreamListenner import TwitterStreamListenner
+
+from sync.kinesis_twitter_sync import KinesisTwitterSync
+from listener.twitter_stream_listener import TwitterStreamListener
 import os
 
 
 def config_parser():
     parser = argparse.ArgumentParser(description='Coletor de Dados do Twitter')
-
     parser.add_argument('config', type=str, 
-                        help='Path do arquivo de configuracoes')
+                                    help='Path do arquivo de configuracoes')
     
     return parser.parse_args()
-
 
 def get_application_environment():
     return os.environ['APPLICATION_ENVIRONMENT']
 
-# helper que configura a autenticação da api do Twitter
+# helper que instancia e autentica a api do twitter via Tweepy
 def config_twitter_api():
     api = None
     try:
-        auth1 = tweepy.auth.OAuthHandler(os.environ['TWITTER_CONSUMER_TOKEN'], 
+        credentials = tweepy.auth.OAuthHandler(os.environ['TWITTER_CONSUMER_TOKEN'], 
                                          os.environ['TWITTER_CONSUMER_SECRET'])
-        auth1.set_access_token( os.environ['TWITTER_API_KEY'] ,
+        credentials.set_access_token( os.environ['TWITTER_API_KEY'] ,
                                 os.environ['TWITTER_API_SECRET'] )
-        api = tweepy.API(auth1)
+        api = tweepy.API(credentials)
         logger.info("Twitter API Conectada com Sucesso")
     except Exception as e:
         if hasattr(e, 'message'):
@@ -38,30 +36,13 @@ def config_twitter_api():
     finally:    
         return api
 
-
-
-# helper que configura o client do Mongodb
-def config_mongo_sync(config):
-    mongo_sync = None
-    try:
-        mongo_sync = MongoTwitterSync(host=config['MONGODB']['MONGODB_URI'],
-                                    port=config['MONGODB']['MONGODB_PORT'],
-                                    database=config['MONGODB']['MONGODB_DATABASE'],
-                                    logger=logger,
-                                    user=config['MONGODB']['MONGODB_USER'],
-                                    password=config['MONGODB']['MONGODB_PASSWORD'],
-                                    collection=config['MONGODB']['MONGODB_COLLECTION'])                                  
-        logger.info("MongoDB Conectado com sucesso")                            
-    except Exception as e:
-        logger.error("Erro ao conectar ao Mongo: " + str(e) )
-    finally:
-        return mongo_sync
-
-
+# helper que configura o client do AWS Kinesis
 def config_kinesis_sync(config):
     kinesis_sync = None
     try:
-        kinesis_sync = KinesisTwitterSync(stream_name='twitter_data_landing_stream', region='us-east-2', logger=logger)
+        kinesis_sync = KinesisTwitterSync(stream_name=config['KINESIS']['STREAM_NAME'], 
+                                            region=config['KINESIS']['AWS_REGION'], 
+                                            logger=logger)
         logger.info("Kinesis Configurado com sucesso")                            
     except Exception as e:
         logger.error("Erro ao conectar ao Kinesis: " + str(e) )
@@ -70,18 +51,17 @@ def config_kinesis_sync(config):
 
 # helper que configura o logger da aplicação
 def config_log(config):    
-    # create logger
+    
     logger = logging.getLogger('posts_collector')
     logger.setLevel(config['LOG']['LOG_LEVEL'])
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(config['LOG']['LOG_LEVEL'])
-    # create formatter
-    formatter = logging.Formatter(config['LOG']['LOG_FORMAT'])
-    # add formatter to ch
-    ch.setFormatter(formatter)
-    # add ch to logger
-    logger.addHandler(ch)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(config['LOG']['LOG_LEVEL'])
+
+    log_formatter = logging.Formatter(config['LOG']['LOG_FORMAT'])
+    console_handler.setFormatter(log_formatter)
+
+    logger.addHandler(console_handler)
 
     return logger
     
@@ -119,15 +99,25 @@ if __name__ == "__main__":
         config = read_config(config_file=args.config)
                     
     # configura o logger
-    logger = config_log(config)
-    # configura a api do Twitter 
-    auth   = config_twitter_api()
-    #mongo_sync = config_mongo_sync(config) 
-    kinesis_sync = config_kinesis_sync(config)   
+    try:
+        logger = config_log(config)    
+        authentication   = config_twitter_api()
+        kinesis_sync = config_kinesis_sync(config)   
+        listener = TwitterStreamListener( sync=kinesis_sync, logger=logger)
+        searchStream = tweepy.Stream(auth=authentication.auth, listener=listener)    
 
-    #listener = TwitterStreamListenner(sync=mongo_sync, logger=logger)
-    listener = TwitterStreamListenner(sync=kinesis_sync, logger=logger)
-    searchStream = tweepy.Stream(auth=auth.auth, listener=listener)    
+        query_string = config['SEARCH']['STRING']
+        searchStream.filter(track=query_string, languages=['pt'])  
+    except InterruptedError as e:
+        logger.debug("Interrompendo aplicação. ")
+        exit(0)            
+    except Exception as e:
+        error_message = "Erro Genérico. "
+        
+        if hasattr(e , 'message'):
+            error_message = error_message + e.message
+        else:
+            error_message = error_message + str(e)
 
-    query_string = config['SEARCH']['STRING']
-    searchStream.filter(track=query_string, languages=['pt'])  
+        logger.error(error_message)
+        exit(1)

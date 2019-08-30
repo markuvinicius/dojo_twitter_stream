@@ -1,4 +1,4 @@
-from TwitterSync import TwitterSync
+from .twitter_sync import TwitterSync
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 import logging

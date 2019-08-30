@@ -1,29 +1,8 @@
 version: '3'
 services:
-  # cria o servico chamado db
-  #dev-mongo-db: 
-    # usa imagem do mongodb
-    #image: mongo:3.4    
-    #volumes: 
-    #  - ./data/db:/data/db
-    # expoe a porta 27017
-    #ports:
-    #  - 27017:27017 
-    # configura login e senha de root
-    #environment:
-    #  MONGO_INITDB_ROOT_USERNAME: root
-    #  MONGO_INITDB_ROOT_PASSWORD: root
-
-  #twitter-collector:    
-  #  image: tweepy-collector:0.1.0    
-  #  depends_on:
-  #    - dev-mongo-db
-
   twitter-collector-kinesis:    
-    image: tweepy-collector-stream:0.1.0    
-    depends_on:
-      - dev-mongo-db
-
+    image: tweepy-collector-stream:0.1.1   
+    
   #twitter-rx-api:
   #  image: datadealers/twitter-rx-comprehend:latest
   #  ports:

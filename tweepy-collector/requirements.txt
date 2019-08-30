@@ -1,4 +1,2 @@
 tweepy
-#pymongo
-#dnspython
 boto3

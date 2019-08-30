@@ -1,4 +1,4 @@
-from TwitterSync import TwitterSync
+from .twitter_sync import TwitterSync
 import boto3
 import json
 
@@ -14,14 +14,17 @@ class KinesisTwitterSync(TwitterSync):
         self.logger = logger
 
     def persist(self,document=None):
-        self.logger.info('Enviando Documento : ' + str(document))
+        self.logger.info('Enviando Documento')
+        self.logger.debug(str(document))
         try:
             tweet_id = str(document['id'])
             put_response = self.kinesis_client.put_record( StreamName=self.stream_name, 
                                                             Data=json.dumps(document), 
                                                             PartitionKey=tweet_id)
 
-            self.logger.info('Documento Enviado para Kinesis - ' + str(put_response))
+            self.logger.info('Documento Enviado para Kinesis')
+            self.logger.debug(str(put_response))
+
             return put_response
         except Exception as e:
             error_message = "Erro Enviando Documento para Kinesis: "
@@ -31,3 +34,4 @@ class KinesisTwitterSync(TwitterSync):
                 error_message = error_message + str(e)
 
             self.logger.error(error_message)
+            return error_message
