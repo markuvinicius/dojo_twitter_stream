@@ -1,14 +1,14 @@
 version: '3'
 services:
   # cria o servico chamado db
-  dev-mongo-db: 
+  #dev-mongo-db: 
     # usa imagem do mongodb
-    image: mongo:3.4    
-    volumes: 
-      - ./data/db:/data/db
+    #image: mongo:3.4    
+    #volumes: 
+    #  - ./data/db:/data/db
     # expoe a porta 27017
-    ports:
-      - 27017:27017 
+    #ports:
+    #  - 27017:27017 
     # configura login e senha de root
     #environment:
     #  MONGO_INITDB_ROOT_USERNAME: root
@@ -21,18 +21,6 @@ services:
 
   twitter-collector-kinesis:    
     image: tweepy-collector-stream:0.1.0    
-    depends_on:
-      - dev-mongo-db
-
-  apollo-graphql:
-    image: node:8.16.0-jessie
-    volumes:
-      # Aplicacao
-      - ./apollo-graphql-server:/app
-    working_dir: /app
-    command: bash ./run_apollo_server.sh
-    ports:
-      - 4000:4000
     depends_on:
       - dev-mongo-db
 
