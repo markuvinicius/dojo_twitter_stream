@@ -1,17 +1,12 @@
 import tweepy
 import json
 import logging
-from datetime import datetime, timedelta
-from email.utils import parsedate_tz
+
+from parser.twitter_dict_parser import TwitterEventToDict
 
 class TwitterStreamListener(tweepy.StreamListener):
     sync = None
     logger = None
-
-    def to_datetime(self, datestring):
-        time_tuple = parsedate_tz(datestring.strip())
-        dt = datetime(*time_tuple[:6])
-        return dt - timedelta(seconds=time_tuple[-1])
     
     def __init__(self, sync, logger):
        self.sync = sync         
