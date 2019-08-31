@@ -35,17 +35,26 @@ docker build \
     --build-arg CONSUMER_SECRET=<YOUR_TWITTER_CONSUMER_SECRET> \
     --build-arg API_KEY=<YOUR_TWITTER_API_KEY> \
     --build-arg API_SECRET=<YOUR_TWITTER_API_SECRET> \
-    -t tweepy-collector .
+    --build-arg APPLICATION_ENVIRONMENT=<ENVIRONMENT> \
+    --build-arg AWS_ACCESS_KEY_ID=<YOUR_AWS_KEY_ID> \
+    --build-arg AWS_SECRET_ACCESS_KEY=<YOUR_AWS_ACCESS_KEY> \
+    -t tweepy-collector-stream:0.1.1 .    
 ```
 The arguments in the above command are:
 * <YOUR_TWITTER_CONSUMER_TOKEN>: You should put your Twitter Consumer Key Here
 * <YOUR_TWITTER_CONSUMER_SECRET>: You should put your Twitter Consumer Secret Here
 * <YOUR_TWITTER_API_KEY>: You should put your Twitter API Key Here
-* <YOUR_TWITTER_API_SECRET>: Your should put your Twitter API Secret Here
+* <YOUR_TWITTER_API_SECRET>: You should put your Twitter API Secret Here
+* <ENVIRONMENT>: You should put your environment config here according to `/config/config.json` file \
+* <YOUR_AWS_KEY_ID>: You should put hear a valid AWS_ACCESS_KEY_ID with permission to put data into kinesis
+* <YOUR_AWS_ACCESS_KEY>: Yout should put hear a valid AWS_SECRET_ACCESS_KEY with permission to put data into kinesis
 
 To see how to get your Twitter Credentials, check https://developer.twitter.com/
+To find out how to generate an aws access key, check this link out: https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/
 
-#### Building Twitter Reactive Comprehend API
+#### Building Twitter Reactive Comprehend API [DEPRECATED]
+
+##### This project is Deprecated after introduction of AWS Kinesis architecture
 
 In order to run the Twitter Reactive Comprehend API you need to build the container image. To accomplish this task, proceed like that:
 

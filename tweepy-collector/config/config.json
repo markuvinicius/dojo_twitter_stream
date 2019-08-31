@@ -9,13 +9,18 @@
             "MONGODB_PASSWORD":""
         },
 
+        "KINESIS":{
+            "STREAM_NAME":"twitter_data_landing_stream",
+            "AWS_REGION":"us-east-2"
+        },
+
         "LOG":{
             "LOG_FORMAT":"%(asctime)s %(levelname)-10s %(threadName)s %(message)s ",
             "LOG_LEVEL":"INFO"
         },
 
-        "SEARCH":{
-            "STRING":["itau","itaú","itau-unibanco","unibanco","banco itau"]
+        "SEARCH":{            
+            "STRING" : ["bolsonaro","bolsominions","psl"]
         }
     },
 

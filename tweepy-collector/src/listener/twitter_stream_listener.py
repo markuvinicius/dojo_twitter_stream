@@ -4,8 +4,7 @@ import logging
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
 
-#override tweepy.StreamListener to add logic to on_data
-class TwitterStreamListenner(tweepy.StreamListener):
+class TwitterStreamListener(tweepy.StreamListener):
     sync = None
     logger = None
 
@@ -22,7 +21,7 @@ class TwitterStreamListenner(tweepy.StreamListener):
         parsed_data = {}
 
         parsed_data['id']       = json_data['id']
-        parsed_data['data']     = self.to_datetime(json_data['created_at'])
+        parsed_data['data']     = json_data['created_at']
         parsed_data['usuario']  = json_data['user']
 
         if 'extended_tweet' in json_data:
@@ -59,6 +58,8 @@ class TwitterStreamListenner(tweepy.StreamListener):
         
         try:
             parsed_data = self.parse_data(json.loads(data))  
+            self.logger.debug(parsed_data)  
+            self.sync.persist(parsed_data) 
         except Exception as e:
             error_message = ""
             if hasattr(e, 'message'):
@@ -70,5 +71,13 @@ class TwitterStreamListenner(tweepy.StreamListener):
             self.logger.error(data)   
             return
     
-        self.logger.debug(parsed_data)  
-        self.sync.persist(parsed_data)        
+        
+
+    def on_error(self, status_code):
+        if ( ( status_code in [420, 429] ) | ( status_code >= 500)) :
+            self.logger.error("Twitter Stream Error: " + str(status_code))            
+            self.logger.error("Disconnecting from Twitter Stream")
+            return False
+        else: 
+            self.logger.debug("Healing from Twitter Error. Reconnecting")   
+            return True       
