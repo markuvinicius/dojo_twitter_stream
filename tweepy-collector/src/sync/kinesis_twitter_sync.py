@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from .twitter_sync import TwitterSync
 import boto3
 import json
