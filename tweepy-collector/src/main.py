@@ -8,6 +8,7 @@ import argparse
 
 from sync.kinesis_twitter_sync import KinesisTwitterSync
 from listener.twitter_stream_listener import TwitterStreamListener
+from listener.twitter_cloud_event_listener import TwitterCloudEventListener
 import os
 
 
@@ -106,7 +107,9 @@ if __name__ == "__main__":
         logger = config_log(config)    
         authentication   = config_twitter_api()
         kinesis_sync = config_kinesis_sync(config)   
-        listener = TwitterStreamListener( sync=kinesis_sync, logger=logger)
+        
+        #listener = TwitterStreamListener( sync=kinesis_sync, logger=logger)
+        listener = TwitterCloudEventListener( sync=kinesis_sync, logger=logger)
         searchStream = tweepy.Stream(auth=authentication.auth, listener=listener)    
 
         query_string = config['SEARCH']['STRING']

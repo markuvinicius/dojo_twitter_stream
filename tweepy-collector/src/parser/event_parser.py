@@ -1,4 +1,4 @@
 class EventParser(object):
     
-    def parse_event(self,event=None,logger=None):
+    def parse_event(self,event=None):
         pass

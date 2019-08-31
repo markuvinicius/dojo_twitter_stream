@@ -2,15 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from .event_parser import EventParser
+import io
 
-class TwitterEventToDict(EventParser):
+from cloudevents.sdk.event import v01
+
+class TwitterEventToCloudEvent(EventParser):    
 
     logger = None
 
-    def __init__(self,logger=None):
+    def __init__(self, logger=None):
         self.logger = logger
     
-    def parse_event(self, event=None):
+    def extract_twitter_data(self, event=None):
         parsed_data = {}
 
         try:
@@ -36,6 +39,7 @@ class TwitterEventToDict(EventParser):
                 parsed_data['quoted'] = True
             else:
                 parsed_data['quoted'] = False
+
             parsed_data['location'] = str(event['user']['location'])
             parsed_data['lang']     = str(event['lang'])
             parsed_data['geo']      = str(event['geo'])
@@ -44,6 +48,7 @@ class TwitterEventToDict(EventParser):
             parsed_data['hashtags'] = str(event['entities']['hashtags'])
             parsed_data['urls']     = str(event['entities']['urls'])
             parsed_data['user_mentions'] = str(event['entities']['user_mentions'])
+
         except Exception as e:
             error_message = 'Erro parseando twitter. '
             
@@ -52,7 +57,24 @@ class TwitterEventToDict(EventParser):
             else:
                 error_message = error_message + str(e)
 
-            self.logger.error(error_message)
+            logger.error(error_message)
             exit(1)
 
         return parsed_data
+
+    def cloud_event(self,event_body=None):
+        event = (
+            v01.Event().
+            SetContentType("application/json").
+            SetData(event_body).
+            SetEventID("my-id").
+            SetSource("from-galaxy-far-far-away").
+            SetEventTime("tomorrow").
+            SetEventType("cloudevent.greet.you")
+        )
+        self.logger.debug("CloudEvent: " + str(event))
+        return event
+
+    def parse_event(self,event=None):
+        data = self.extract_twitter_data(event)
+        return self.cloud_event(event_body=data)

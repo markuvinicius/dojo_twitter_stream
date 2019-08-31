@@ -4,10 +4,9 @@ import tweepy
 
 import json
 import logging
+from parser.twitter_cloud_event_parser import TwitterEventToCloudEvent
 
-from parser.twitter_dict_parser import TwitterEventToDict
-
-class TwitterStreamListener(tweepy.StreamListener):
+class TwitterCloudEventListener(tweepy.StreamListener):
     sync = None
     logger = None
     
@@ -19,9 +18,9 @@ class TwitterStreamListener(tweepy.StreamListener):
         self.logger.debug("Postagem Recebida")        
         
         try:
-            event_parser = TwitterEventToDict(logger=self.logger) 
+            event_parser = TwitterEventToCloudEvent(logger=self.logger) 
             parsed_data = event_parser.parse_event(json.loads(data))  
-
+            
             self.logger.debug(parsed_data)  
             self.sync.persist(parsed_data) 
         except Exception as e:
