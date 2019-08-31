@@ -52,7 +52,9 @@ The arguments in the above command are:
 To see how to get your Twitter Credentials, check https://developer.twitter.com/
 To find out how to generate an aws access key, check this link out: https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/
 
-#### Building Twitter Reactive Comprehend API
+#### Building Twitter Reactive Comprehend API [DEPRECATED]
+
+##### This project is Deprecated after introduction of AWS Kinesis architecture
 
 In order to run the Twitter Reactive Comprehend API you need to build the container image. To accomplish this task, proceed like that:
 
