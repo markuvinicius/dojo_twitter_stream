@@ -97,7 +97,7 @@ if __name__ == "__main__":
         config = read_config(config_file=args.config, env=app_env)
     else:
         config = read_config(config_file=args.config)
-                    
+
     # configura o logger
     try:
         logger = config_log(config)    
@@ -107,6 +107,7 @@ if __name__ == "__main__":
         searchStream = tweepy.Stream(auth=authentication.auth, listener=listener)    
 
         query_string = config['SEARCH']['STRING']
+        logger.info("QUERY STRING: " + str(query_string))
         searchStream.filter(track=query_string, languages=['pt'])  
     except InterruptedError as e:
         logger.debug("Interrompendo aplicação. ")
